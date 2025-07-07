@@ -156,4 +156,4 @@ docker-compose up --build
 
 ---
 
-**POPCO Development Team** 🚀
+**유레카 최종 프로젝트 4조 - POPCO** 🚀
