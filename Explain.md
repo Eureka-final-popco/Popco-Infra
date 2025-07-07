@@ -22,6 +22,7 @@ cd Popco-Infra
 ```
 ![image](https://github.com/user-attachments/assets/c9e6afdd-15ce-4f7f-a3a4-f0ff6c4a9e30)
 
+popco/
 ![image](https://github.com/user-attachments/assets/ba5ee928-63d3-42f9-a184-c3808a777c0c)
 
 popco 폴더 안에 모든 프로젝트가 각각 클론 되어있어야합니다!!
