@@ -89,30 +89,32 @@ services:
       - popco-network
     restart: unless-stopped
 
-  # popco-ai:
-  #   build:
-  #     context: ../Popco-Ai
-  #     dockerfile: Dockerfile
-  #   container_name: popco-ai
-  #   ports:
-  #     - "8083:8000"
-  #   environment:
-  #     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-  #     - DB_HOST=${DB_HOST}
-  #     - DB_PORT=${DB_PORT}
-  #     - DB_NAME=${DB_NAME}
-  #     - DB_USERNAME=${DB_USERNAME}
-  #     - DB_PASSWORD=${DB_PASSWORD}
-  #     - REDIS_HOST=${REDIS_HOST}
-  #     - REDIS_PORT=${REDIS_PORT}
-  #   networks:
-  #     - popco-network
-  #   depends_on:
-  #     mysql:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   restart: unless-stopped
+  popco-ai:
+     build:
+       context: ../Popco-Ai
+       dockerfile: Dockerfile
+     container_name: popco-ai
+     ports:
+       - "8083:8000"
+     env_file:
+       - ../Popco-Ai/.env.docker
+     environment:
+       - DOCKER_ENV=true
+       - DB_HOST=${DB_HOST}
+       - DB_PORT=${DB_PORT}
+       - DB_NAME=${DB_NAME}
+       - DB_USERNAME=${DB_USERNAME}
+       - DB_PASSWORD=${DB_PASSWORD}
+       - REDIS_HOST=${REDIS_HOST}
+       - REDIS_PORT=${REDIS_PORT}
+     networks:
+       - popco-network
+     depends_on:
+       mysql:
+         condition: service_healthy
+       redis:
+         condition: service_healthy
+     restart: unless-stopped
 
   nginx:
     build:
@@ -127,7 +129,7 @@ services:
     depends_on:
       - popco-admin
       - popco-client
-      # - popco-ai  # AI 추가 시 주석 해제
+      - popco-ai
 
 volumes:
   mysql_data:
