@@ -48,7 +48,7 @@ jobs:
           fi
 
           # docker-compose*.yml 파일들에서 필요한 변수 목록 추출
-          REQUIRED_VARS=$(grep -oP '\$\{\K[a-zA-Z0-9_]+' docker-compose*.yml | sort -u)
+          REQUIRED_VARS=$(grep -h -oP '\$\{\K[a-zA-Z0-9_]+' docker-compose*.yml | sort -u)
           echo "📋 Variables required by compose files:"
           echo "$REQUIRED_VARS"
           
