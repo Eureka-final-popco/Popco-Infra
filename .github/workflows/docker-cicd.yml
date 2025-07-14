@@ -34,6 +34,28 @@ jobs:
             sudo apt-get install -y docker-compose-plugin
           }
 
+      - name: Set up environment variables for testing
+        run: |
+          echo "🔧 Setting up test environment variables..."
+          
+          # GitHub Actions용 임시 환경변수 설정
+          cat > .env << EOF
+          MYSQL_ROOT_PASSWORD=test_password
+          MYSQL_DATABASE=test_db
+          MYSQL_USER=test_user
+          MYSQL_PASSWORD=test_password
+          SPRING_PROFILES_ACTIVE=test
+          DB_HOST=localhost
+          DB_PORT=3306
+          DB_NAME=test_db
+          DB_USERNAME=test_user
+          DB_PASSWORD=test_password
+          REDIS_HOST=localhost
+          REDIS_PORT=6379
+          EOF
+          
+          echo "✅ Test environment variables created"
+
       - name: Validate docker-compose files
         run: |
           echo "🔍 Checking for docker-compose files..."
