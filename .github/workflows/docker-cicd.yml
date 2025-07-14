@@ -25,13 +25,22 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: Install Docker Compose
+        run: |
+          # Docker Compose V2는 docker compose (공백)로 사용
+          docker compose version || {
+            echo "Installing Docker Compose..."
+            sudo apt-get update
+            sudo apt-get install -y docker-compose-plugin
+          }
+
       - name: Validate docker-compose files
         run: |
           echo "🔍 Checking for docker-compose files..."
           
           if [ -f docker-compose.yml ]; then
             echo "✅ Found docker-compose.yml - validating..."
-            docker-compose config
+            docker compose config
           else
             echo "❌ docker-compose.yml not found"
             exit 1
@@ -39,16 +48,16 @@ jobs:
           
           if [ -f docker-compose-deploy.yml ]; then
             echo "✅ Found docker-compose-deploy.yml - validating..."
-            docker-compose -f docker-compose-deploy.yml config
+            docker compose -f docker-compose-deploy.yml config
           fi
 
       - name: Check services and volumes
         run: |
           echo "📋 Listing services..."
-          docker-compose config --services
+          docker compose config --services
           
           echo "💾 Listing volumes..."
-          docker-compose config --volumes
+          docker compose config --volumes
 
       - name: Security check
         run: |
