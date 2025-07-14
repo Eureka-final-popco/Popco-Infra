@@ -17,14 +17,10 @@ jobs:
 
       - name: 📝 Validate docker-compose.yml
         run: |
-          # docker compose V2 플러그인 설치 (최신 runner에는 기본 포함될 수 있음)
-          sudo apt-get update && sudo apt-get install -y docker-compose-plugin
-          
-          # docker-compose.yml 파일의 문법적 유효성을 검사합니다.
+          # 별도 설치 없이 바로 docker compose 명령어를 사용합니다.
           docker compose -f docker-compose.yml config > /dev/null
           echo "✅ docker-compose.yml syntax is valid."
-          
-          # docker-compose-deploy.yml 파일도 있다면 함께 검사합니다.
+    
           if [ -f docker-compose-deploy.yml ]; then
             docker compose -f docker-compose-deploy.yml config > /dev/null
             echo "✅ docker-compose-deploy.yml syntax is valid."
