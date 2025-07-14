@@ -1,6 +1,7 @@
 # 워크플로우 이름
-name: Validate Compose File Syntax
+name: Validate Infra Configuration
 
+# 워크플로우 실행 조건
 on:
   push:
     branches: [ "dev" ]
@@ -8,28 +9,60 @@ on:
     branches: [ "dev" ]
   workflow_dispatch:
 
+# 실행될 작업 정의
 jobs:
-  validate-syntax:
+  # 'validate' 라는 이름의 단일 작업
+  validate:
+    # 실행 환경 지정
     runs-on: ubuntu-latest
+
+    # 작업 단계 정의
     steps:
+      # 1. 레포지토리 코드 내려받기
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Docker Compose 파일 문법 검사
+      # docker-compose.yml에 잘못된 env_file 경로가 없어야 통과함
       - name: 📝 Validate docker-compose file syntax
         run: |
-          # docker-compose.yml이 요구하는 임시 파일을 생성하여 오류를 방지
-          echo "Creating dummy files to bypass env_file error..."
-          mkdir -p ./Popco-Ai
-          touch ./Popco-Ai/.env.docker
-
-          # docker-compose.yml 파일의 문법만 검사
           echo "Validating docker-compose.yml syntax..."
           docker compose -f docker-compose.yml config > /dev/null
           echo "✅ docker-compose.yml syntax is valid."
           
-          # docker-compose-deploy.yml 파일이 있다면 함께 검사
           if [ -f docker-compose-deploy.yml ]; then
             echo "Validating docker-compose-deploy.yml syntax..."
             docker compose -f docker-compose-deploy.yml config > /dev/null
             echo "✅ docker-compose-deploy.yml syntax is valid."
+          fi
+
+      # 3. 환경 변수 설정 검증
+      - name: 📋 Validate Environment Configuration
+        run: |
+          echo "🌍 Validating environment variables defined in .env.example..."
+
+          # .env.example 파일 존재 여부 확인
+          if [ ! -f .env.example ]; then
+            echo "❌ Critical: .env.example file not found!"
+            exit 1
+          fi
+
+          # docker-compose*.yml 파일들에서 필요한 변수 목록 추출
+          REQUIRED_VARS=$(grep -oP '\$\{\K[a-zA-Z0-9_]+' docker-compose*.yml | sort -u)
+          echo "📋 Variables required by compose files:"
+          echo "$REQUIRED_VARS"
+          
+          # .env.example에 모든 필수 변수가 정의되어 있는지 확인
+          MISSING_VARS=""
+          for VAR in $REQUIRED_VARS; do
+            if ! grep -q "^${VAR}=" .env.example; then
+              MISSING_VARS="$MISSING_VARS $VAR"
+            fi
+          done
+
+          if [ -n "$MISSING_VARS" ]; then
+            echo "❌ Critical: The following variables are missing from .env.example: $MISSING_VARS"
+            exit 1
+          else
+            echo "✅ All required variables are defined in .env.example."
           fi
