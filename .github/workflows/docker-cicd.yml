@@ -70,14 +70,19 @@ jobs:
 
       - name: Environment file check
         run: |
-          echo "🌍 Checking environment files..."
+          echo "🌍 Checking environment configuration..."
           
-          if [ -f .env ]; then
-            echo "✅ .env file found"
+          # .env는 gitignore되어 있어서 확인 불가
+          echo "ℹ️  .env file should be in .gitignore for security"
+          
+          # docker-compose.yml에서 env_file 사용 여부 확인
+          if grep -q "env_file" docker-compose.yml 2>/dev/null; then
+            echo "📝 Environment file dependency detected in docker-compose.yml"
+            echo "💡 Make sure to provide .env file during deployment"
           fi
           
-          if [ ! -f .env.example ]; then
-            echo "💡 .env.example not found - consider adding one for documentation"
-          else
-            echo "✅ .env.example found"
+          # 환경변수 사용 여부 확인
+          if grep -q "\${.*}" docker-compose.yml 2>/dev/null; then
+            echo "🔧 Environment variables detected in docker-compose.yml"
+            echo "💡 Make sure all required environment variables are set"
           fi
