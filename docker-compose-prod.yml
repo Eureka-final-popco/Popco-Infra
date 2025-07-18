@@ -63,7 +63,7 @@ services:
     restart: unless-stopped
 
   nginx:
-    image: ${DOCKER_HUB}/popco-frontend:${IMAGE_TAG:-latest}
+    image: ${DOCKER_HUB}/popco-nginx:${IMAGE_TAG:-latest}
     container_name: popco-nginx
     ports:
       - "80:80"
