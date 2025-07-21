@@ -34,7 +34,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
-      - ${PWD}/secrets/application-secret.properties:/app/config/application-secret.properties:ro
+      - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
       - admin_logs:/app/logs
     depends_on:
       redis:
@@ -59,7 +59,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
-      - ${PWD}/secrets/application-secret.properties:/app/config/application-secret.properties:ro
+      - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
       - client_logs:/app/logs
     depends_on:
       redis:
