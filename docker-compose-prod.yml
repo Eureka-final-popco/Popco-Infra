@@ -62,9 +62,9 @@ services:
       - popco-network
     restart: unless-stopped
 
-  nginx:
-    image: ${DOCKER_HUB}/popco-nginx:${IMAGE_TAG:-latest}
-    container_name: popco-nginx
+  front:
+    image: ${DOCKER_HUB}/popco-front:${IMAGE_TAG:-latest}
+    container_name: popco-front
     ports:
       - "80:80"
     networks:
