@@ -35,7 +35,6 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
-      - admin_logs:/app/logs
     depends_on:
       redis:
         condition: service_healthy
@@ -60,7 +59,6 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
-      - client_logs:/app/logs
     depends_on:
       redis:
         condition: service_healthy
