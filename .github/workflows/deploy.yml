@@ -34,7 +34,7 @@ jobs:
           
             # Git pull
             echo "1. 최신 코드 가져오기..."
-            git pull origin main
+            git pull origin dev
           
             # .env 파일 확인
             if [ ! -f .env ]; then
