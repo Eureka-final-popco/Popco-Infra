@@ -43,8 +43,14 @@ jobs:
             fi
           
             # secrets 디렉토리 및 파일 확인
-            if [ ! -f secrets/application-secret.properties ]; then
-              echo "ERROR: secrets/application-secret.properties 파일이 없습니다!"
+            if [ ! -f secrets/application-client-secret.properties ]; then
+              echo "ERROR: secrets/application-client-secret.properties 파일이 없습니다!"
+              exit 1
+            fi
+          
+          # secrets 디렉토리 및 파일 확인
+            if [ ! -f secrets/application-admin-secret.properties ]; then
+              echo "ERROR: secrets/application-admin-secret.properties 파일이 없습니다!"
               exit 1
             fi
           
