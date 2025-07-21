@@ -34,7 +34,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
-      - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
+      - ./secrets/application-admin-secret.properties:/app/config/application-admin-secret.properties:ro
     depends_on:
       redis:
         condition: service_healthy
@@ -58,7 +58,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
-      - ./secrets/application-secret.properties:/app/config/application-secret.properties:ro
+      - ./secrets/application-client-secret.properties:/app/config/application-client-secret.properties:ro
     depends_on:
       redis:
         condition: service_healthy
