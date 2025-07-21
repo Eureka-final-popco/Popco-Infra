@@ -20,7 +20,7 @@ jobs:
       - name: Pull & Restart on Remote
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /path/to/your/infra
+            cd ~/Popco-Infra
             docker-compose -f docker-compose-prod.yml pull
             docker-compose -f docker-compose-prod.yml up -d
           EOF
