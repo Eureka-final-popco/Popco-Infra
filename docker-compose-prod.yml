@@ -73,8 +73,6 @@ services:
       - "80:80"
     environment:
       - VITE_BACK_URL=${VITE_BACK_URL}
-      - KAKAO_REDIRECT=${KAKAO_REDIRECT}
-      - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
       - VITE_KAKAO_LOGIN_URL=${VITE_KAKAO_LOGIN_URL}
     networks:
       - popco-network
