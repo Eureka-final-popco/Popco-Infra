@@ -42,12 +42,12 @@ services:
   popco-admin:
     build:
       context: ../Popco-Admin
-      dockerfile: Dockerfile.local
+      dockerfile: Dockerfile
     container_name: popco-admin
     ports:
       - "8081:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_LOCAL_ACTIVE}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
@@ -97,10 +97,10 @@ services:
     ports:
       - "8084:8000"
     volumes:
-      - ../Popco-Recommended/app:/app
+#      - ../Popco-Recommended/app:/app
       - /app/__pycache__
       - /app/.pytest_cache
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
       - DOCKER_ENV=true
       - DB_HOST=${DB_HOST}
