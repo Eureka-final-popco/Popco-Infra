@@ -39,15 +39,51 @@ services:
       timeout: 10s
       retries: 5
 
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      dockerfile: Dockerfile
+    container_name: popco-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - popco-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: kibana:8.11.0
+    container_name: popco-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - popco-network
+    restart: unless-stopped
+
   popco-admin:
     build:
       context: ../Popco-Admin
-      dockerfile: Dockerfile.local
+      dockerfile: Dockerfile
     container_name: popco-admin
     ports:
       - "8081:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_LOCAL_ACTIVE}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
@@ -80,6 +116,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+      - ELASTICSEARCH_URI=${ELASTICSEARCH_URI}
     depends_on:
       mysql:
         condition: service_healthy
@@ -141,6 +178,8 @@ volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  elasticsearch_data:
     driver: local
 
 networks:
