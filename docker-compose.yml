@@ -96,13 +96,13 @@ services:
     container_name: popco-recommend
     ports:
       - "8084:8000"
-    volumes:
-      - ../Popco-Recommended/app:/app
-      - /app/__pycache__
-      - /app/.pytest_cache
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+#    volumes:
+##      - ../Popco-Recommended/app:/app
+#      - /app/__pycache__
+#      - /app/.pytest_cache
+#    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
-      - DOCKER_ENV=true
+#      - DOCKER_ENV=true
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
@@ -110,6 +110,10 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+      - MY_AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - MY_AWS_S3_REGION=${AWS_S3_REGION}
+      - MY_AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - MY_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     networks:
       - popco-network
     depends_on:
